@@ -46,13 +46,21 @@ My working reference for SQL, built while learning. Two halves:
 | Command | What it does |
 |---|---|
 | `WHERE col = value` | Exact match |
-| `WHERE col != value` | Not equal |
+| `WHERE col != value` / `WHERE col <> value` | Not equal (both work; `!=` and `<>` are identical) |
 | `WHERE col > / < / >= / <=` | Comparisons |
-| `WHERE col LIKE "abc%"` | Pattern match (`%` = any chars, `_` = one char) |
+| `WHERE col LIKE "abc%"` | Pattern match (`%` = any number of chars, `_` = exactly one char) |
 | `WHERE col IN (a, b, c)` | Matches any in the list |
 | `WHERE col BETWEEN x AND y` | Range (inclusive) |
 | `WHERE col IS NULL` / `IS NOT NULL` | Missing-value check |
 | `AND` / `OR` | Combine conditions |
+
+> **LIKE patterns — one condition each.** To test several patterns, write a
+> separate `LIKE` joined by `AND`/`OR`. You CANNOT comma-pack them into one string.
+> Wrong: `LIKE '%a%,%e%,%i%'`  ·  Right: `name LIKE '%a%' AND name LIKE '%e%' AND name LIKE '%i%'`
+>
+> **A space is a normal character.** Match it by typing a literal space in the
+> pattern. `'% %'` = "contains a space somewhere". `name NOT LIKE '% %'` = "no spaces in name".
+> (`_` is NOT a space — it's any single character.)
 
 ### Sorting & limiting
 | Command | What it does |
@@ -75,6 +83,12 @@ My working reference for SQL, built while learning. Two halves:
 | `AVG(col)` | Average |
 | `MAX(col)` / `MIN(col)` | Highest / lowest |
 
+### String functions
+| Command | What it does |
+|---|---|
+| `LENGTH(col)` | Number of characters in a string (`LEN` in Microsoft SQL Server) |
+| `LEFT(col, n)` | First n characters of a string, e.g. `LEFT(name, 1)` = first letter |
+
 ### Grouping & filtering groups
 | Command | What it does |
 |---|---|
@@ -86,6 +100,7 @@ My working reference for SQL, built while learning. Two halves:
 |---|---|
 | `+ - * /` | Arithmetic on columns, e.g. `(a + b) / 1000000` |
 | `%` | Modulo (remainder); `col % 2 = 0` → even |
+| `ROUND(value, n)` | Round to n decimal places, e.g. `ROUND(gdp/1000000000.0, 2)` |
 
 ---
 
@@ -97,6 +112,11 @@ My working reference for SQL, built while learning. Two halves:
 - Semicolon `;` goes at the **very end only** — never mid-query.
 - Column names must match the table **exactly** (case + spelling).
 - Don't reach for `LEFT JOIN` by default — only when the task implies missing matches ("including empty", "all X even without Y").
+- **Integer division drops the decimals.** `pop/1000000` truncates to a whole number;
+  `pop/1000000.0` (divide by a decimal) keeps the decimal places. Use `.0` when you want decimal output.
+- **After editing a query, re-scan the line you touched** for orphaned commas/keywords.
+  Most of my errors are leftover commas from trimming a column out of SELECT.
+- Each `LIKE` tests one pattern — chain multiples with `AND`/`OR`, don't comma-pack one string.
 
 ---
 
