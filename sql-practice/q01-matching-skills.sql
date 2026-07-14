@@ -1,6 +1,6 @@
-Datalemur
+/*Datalemur
 Data Science Skills
-LinkedIn SQL Interview Question
+LinkedIn SQL Interview Question*/
 
 SELECT candidate_Id
 FROM candidates
