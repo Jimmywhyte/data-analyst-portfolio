@@ -9,4 +9,4 @@ WHERE skill = 'Python'
     OR skill = 'PostgreSQL'
     GROUP BY candidate_id
     HAVING count(skill) = 3
-    
+    ORDER BY candidate_id ASC
