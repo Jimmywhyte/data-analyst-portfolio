@@ -4,9 +4,6 @@ LinkedIn SQL Interview Question*/
 
 SELECT candidate_Id
 FROM candidates
-WHERE skill = 'Python' 
-    OR skill = 'Tableau'
-    OR skill = 'PostgreSQL'
-    GROUP BY candidate_id
+WHERE skill IN ('Python', 'Tableau', 'PostgreSQL')
     HAVING count(skill) = 3
     ORDER BY candidate_id ASC
